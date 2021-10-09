@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component
 @Component
 object PriceService {
     fun calculatePrice(user: User, book: Book): Price {
-        TODO()
+        return book.basePrice
     }
 }
