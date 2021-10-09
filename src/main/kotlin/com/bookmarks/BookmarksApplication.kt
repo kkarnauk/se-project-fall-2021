@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class BookmarksApplication
 
 fun main(args: Array<String>) {
-	runApplication<BookmarksApplication>(*args)
+    runApplication<BookmarksApplication>(*args)
 }
