@@ -5,6 +5,6 @@ data class User(
     val name: String,
     val surname: String,
     val nickname: String,
-    val subscribes: List<Subscribe>,
+    val subscriptions: List<Subscription>,
     val purchasedBookIds: List<String>,
 )

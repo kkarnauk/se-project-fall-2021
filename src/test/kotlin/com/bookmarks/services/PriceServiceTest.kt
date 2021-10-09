@@ -11,7 +11,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
 
     @Test
     fun simplePriceCheck() {
-        priceService.calculatePrice(
+        priceService.calculatePurchasePrice(
             getUser(),
             getBook()
         )
@@ -20,12 +20,24 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     @Test
     fun subscribeDecreasesPrice() {
         getBook().let {
-            assertTrue(priceService.calculatePrice(
-                getUser(subscribes = listOf(Subscribe.Bookmark)),
+            assertTrue(priceService.calculatePurchasePrice(
+                getUser(subscriptions = listOf(Subscription.Bookmark)),
                 it
             ) < it.basePrice)
         }
     }
+
+    @Test
+    fun `full price if no subscriptions`() {
+        getBook().let {
+            assertTrue(priceService.calculatePurchasePrice(
+                getUser(subscriptions = emptyList()),
+                it
+            ) == it.basePrice)
+        }
+    }
+
+
 
     companion object {
         private fun getUser(
@@ -33,9 +45,9 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
             name: String = "Petya",
             surname: String = "Surkov",
             nickname: String = "psurkov",
-            subscribes: List<Subscribe> = emptyList(),
+            subscriptions: List<Subscription> = emptyList(),
             bookIds: List<String> = emptyList()
-        ) = User(id, name, surname, nickname, subscribes, bookIds)
+        ) = User(id, name, surname, nickname, subscriptions, bookIds)
 
         private fun getBook(
             id: String = "2020",
