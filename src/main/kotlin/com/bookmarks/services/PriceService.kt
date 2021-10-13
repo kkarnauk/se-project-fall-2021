@@ -23,6 +23,18 @@ object PriceService {
     }
 
     fun calculatePurchasePrice(user: User, books: List<Book>): Price? {
-        return null
+        return books
+            .map { calculatePurchasePrice(user, it) }
+            .ifNullsIn { return null }
+            ?.sumOf { it.toCents() }
+            ?.fromCents()
+    }
+
+    private inline fun <T> List<T?>.ifNullsIn(ifInDo : () -> Unit): List<T>? {
+        if (null in this) {
+            ifInDo()
+            return null
+        }
+        return filterNotNull()
     }
 }

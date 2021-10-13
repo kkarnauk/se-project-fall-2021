@@ -110,6 +110,19 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
         }
     }
 
+    @Test
+    fun `5 books gives 10 percent discount`() {
+        List(5) { getBook() }.let {
+            assertEquals(
+                priceService.calculatePurchasePrice(
+                    getUser(subscriptions = emptyList()),
+                    it
+                ),
+                getBook().basePrice * 5.0 * 0.9
+            )
+        }
+    }
+
     companion object {
         private fun getUser(
             id: String = "228",
