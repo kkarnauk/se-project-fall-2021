@@ -1,6 +1,7 @@
 package com.bookmarks.services
 
 import com.bookmarks.models.*
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,7 +24,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
             assertTrue(priceService.calculatePurchasePrice(
                 getUser(subscriptions = listOf(Subscription.Bookmark)),
                 it
-            ) < it.basePrice)
+            )!! < it.basePrice)
         }
     }
 
@@ -37,7 +38,12 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
         }
     }
 
-
+    @Test
+    fun `bought book costs nothing`() {
+        getUser(bookIds = listOf(getBook().id)).let {
+            assertNull(priceService.calculatePurchasePrice(it,getBook()))
+        }
+    }
 
     companion object {
         private fun getUser(
