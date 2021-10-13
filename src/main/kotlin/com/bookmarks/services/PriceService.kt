@@ -13,6 +13,9 @@ object PriceService {
         if (user.purchasedBookIds.contains(book.id)) {
             return null
         }
+        if (user.subscriptions.contains(Subscription.YandexPlus)) {
+            return (2099 / 2).fromCents()
+        }
         return user.subscriptions.map {
             book.basePrice * it.discount
         }.map { it.cents }.minOrNull()?.fromCents() ?: book.basePrice

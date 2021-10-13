@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import kotlin.random.Random
 
 @SpringBootTest
 internal class PriceServiceTest(@Autowired val priceService: PriceService) {
@@ -73,6 +74,19 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
                 ),
                 (it.basePrice.toCents() / 2).fromCents()
             )
+        }
+    }
+
+    @Test
+    fun yandexPlusStressTest() {
+        List(1000) {
+            getUser(subscriptions = listOf(Subscription.YandexPlus)).let {
+                val book = getBook(price = Price(Random.nextInt(), Random.nextInt()))
+                assertEquals(
+                    priceService.calculatePurchasePrice(it, book)!!,
+                    (book.basePrice.toCents() / 2).fromCents()
+                )
+            }
         }
     }
 
