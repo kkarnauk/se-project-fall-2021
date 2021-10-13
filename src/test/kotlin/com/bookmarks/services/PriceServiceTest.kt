@@ -1,6 +1,9 @@
 package com.bookmarks.services
 
-import com.bookmarks.models.*
+import com.bookmarks.models.Book
+import com.bookmarks.models.Price
+import com.bookmarks.models.Subscription
+import com.bookmarks.models.User
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -21,27 +24,41 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     @Test
     fun subscribeDecreasesPrice() {
         getBook().let {
-            assertTrue(priceService.calculatePurchasePrice(
-                getUser(subscriptions = listOf(Subscription.Bookmark)),
-                it
-            )!! < it.basePrice)
+            assertTrue(
+                priceService.calculatePurchasePrice(
+                    getUser(subscriptions = listOf(Subscription.Bookmark)),
+                    it
+                )!! < it.basePrice
+            )
         }
     }
 
     @Test
     fun `full price if no subscriptions`() {
         getBook().let {
-            assertTrue(priceService.calculatePurchasePrice(
-                getUser(subscriptions = emptyList()),
-                it
-            ) == it.basePrice)
+            assertTrue(
+                priceService.calculatePurchasePrice(
+                    getUser(subscriptions = emptyList()),
+                    it
+                ) == it.basePrice
+            )
         }
     }
 
     @Test
     fun `bought book costs nothing`() {
-        getUser(bookIds = listOf(getBook().id)).let {
-            assertNull(priceService.calculatePurchasePrice(it,getBook()))
+        assertNull(priceService.calculatePurchasePrice(getUser(bookIds = listOf(getBook().id)), getBook()))
+    }
+
+    @Test
+    fun `bought another book does not change cost`() {
+        getBook().let {
+            assertTrue(
+                priceService.calculatePurchasePrice(
+                    getUser(subscriptions = emptyList(), bookIds = listOf(getBook().id + "123")),
+                    it
+                ) == it.basePrice
+            )
         }
     }
 
