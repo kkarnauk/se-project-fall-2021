@@ -78,6 +78,14 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     }
 
     @Test
+    fun `simple purchase book bundle`() {
+        priceService.calculatePurchasePrice(
+            getUser(),
+            listOf()
+        )
+    }
+
+    @Test
     fun yandexPlusStressTest() {
         List(1000) {
             getUser(subscriptions = listOf(Subscription.YandexPlus)).let {
