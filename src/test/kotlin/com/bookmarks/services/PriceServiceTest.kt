@@ -2,10 +2,11 @@ package com.bookmarks.services
 
 import com.bookmarks.models.Book
 import com.bookmarks.models.Price
+import com.bookmarks.models.Price.Companion.fromCents
+import com.bookmarks.models.Price.Companion.toCents
 import com.bookmarks.models.Subscription
 import com.bookmarks.models.User
-import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -58,6 +59,19 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
                     getUser(subscriptions = emptyList(), bookIds = listOf(getBook().id + "123")),
                     it
                 ) == it.basePrice
+            )
+        }
+    }
+
+    @Test
+    fun `discount calculates correctly`() {
+        getBook().let {
+            assertEquals(
+                priceService.calculatePurchasePrice(
+                    getUser(subscriptions = listOf(Subscription.YandexPlus)),
+                    it
+                ),
+                (it.basePrice.toCents() / 2).fromCents()
             )
         }
     }

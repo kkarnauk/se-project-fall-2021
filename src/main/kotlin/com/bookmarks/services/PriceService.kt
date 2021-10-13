@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 @Component
 object PriceService {
     fun calculatePurchasePrice(user: User, book: Book): Price? { // TODO: керил сделай красиво
-        if (user.purchasedBookIds.isNotEmpty()) {
+        if (user.purchasedBookIds.contains(book.id)) {
             return null
         }
         return user.subscriptions.map {
