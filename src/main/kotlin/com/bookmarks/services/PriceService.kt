@@ -4,7 +4,6 @@ import com.bookmarks.models.Book
 import com.bookmarks.models.Price
 import com.bookmarks.models.Price.Companion.fromCents
 import com.bookmarks.models.Price.Companion.toCents
-import com.bookmarks.models.Subscription
 import com.bookmarks.models.User
 import org.springframework.stereotype.Component
 
@@ -23,17 +22,20 @@ object PriceService {
     }
 
     fun calculatePurchasePrice(user: User, books: List<Book>): Price? {
-        return books
+        var price = books
             .map { calculatePurchasePrice(user, it) }
-            .ifNullsIn { return null }
-            ?.sumOf { it.toCents() }
-            ?.fromCents()
+            .ifNullsReturn { return null }
+            .sumOf { it.toCents() }
+            .fromCents()
+        if (books.size >= 5) {
+            price *= 0.9
+        }
+        return price
     }
 
-    private inline fun <T> List<T?>.ifNullsIn(ifInDo : () -> Unit): List<T>? {
+    private inline fun <T> List<T?>.ifNullsReturn(ifInDo: () -> Nothing): List<T> {
         if (null in this) {
             ifInDo()
-            return null
         }
         return filterNotNull()
     }
