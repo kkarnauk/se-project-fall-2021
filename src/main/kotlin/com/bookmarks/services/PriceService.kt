@@ -23,6 +23,6 @@ object PriceService {
     }
 
     fun calculatePurchasePrice(user: User, books: List<Book>): Price? {
-        throw UnsupportedOperationException()
+        return null
     }
 }

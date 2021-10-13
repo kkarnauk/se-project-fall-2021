@@ -78,14 +78,6 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     }
 
     @Test
-    fun `simple purchase book bundle`() {
-        priceService.calculatePurchasePrice(
-            getUser(),
-            listOf()
-        )
-    }
-
-    @Test
     fun yandexPlusStressTest() {
         List(1000) {
             getUser(subscriptions = listOf(Subscription.YandexPlus)).let {
@@ -95,6 +87,26 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
                     (book.basePrice.toCents() / 2).fromCents()
                 )
             }
+        }
+    }
+
+    @Test
+    fun `simple purchase book bundle`() {
+        priceService.calculatePurchasePrice(
+            getUser(),
+            listOf()
+        )
+    }
+
+    @Test
+    fun `simple purchase book bundle of one book if no subscriptions`() {
+        getBook().let {
+            assertTrue(
+                priceService.calculatePurchasePrice(
+                    getUser(subscriptions = emptyList()),
+                    listOf(it)
+                ) == it.basePrice
+            )
         }
     }
 
