@@ -21,22 +21,19 @@ object PriceService {
         }.map { it.toCents() }.minOrNull()?.fromCents() ?: book.basePrice
     }
 
-    fun calculatePurchasePrice(user: User, books: List<Book>): Price? {
-        var price = books
-            .map { calculatePurchasePrice(user, it) }
-            .ifNullsReturn { return null }
-            .sumOf { it.toCents() }
-            .fromCents()
-        if (books.size >= 5) {
-            price *= 0.9
+    fun calculatePurchasePrice(user: User, books: List<Book>): Price? =
+        books
+        .map { calculatePurchasePrice(user, it) }
+        .ifNullsReturn { return null }
+        .sumOf { it.toCents() }
+        .fromCents() * when {
+            books.size >= 10 -> 0.8
+            books.size >= 5 -> 0.9
+            else -> 1.0
         }
-        return price
-    }
 
     private inline fun <T> List<T?>.ifNullsReturn(ifInDo: () -> Nothing): List<T> {
-        if (null in this) {
-            ifInDo()
-        }
+        if (null in this) ifInDo()
         return filterNotNull()
     }
 }

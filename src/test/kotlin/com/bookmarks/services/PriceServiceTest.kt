@@ -112,28 +112,34 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
 
     @Test
     fun `5 books gives 10 percent discount`() {
-        List(5) { getBook() }.let {
-            assertEquals(
-                priceService.calculatePurchasePrice(
-                    getUser(subscriptions = emptyList()),
-                    it
-                ),
-                getBook().basePrice * 5.0 * 0.9
-            )
-        }
+        assertEquals(
+            priceService.calculatePurchasePrice(
+                getUser(subscriptions = emptyList()),
+                List(5) { getBook() }
+            ),
+            getBook().basePrice * 5.0 * 0.9
+        )
     }
 
     @Test
     fun `10 books gives 15 percent discount`() {
-        List(10) { getBook() }.let {
-            assertEquals(
-                priceService.calculatePurchasePrice(
-                    getUser(subscriptions = emptyList()),
-                    it
-                ),
-                getBook().basePrice * 5.0 * 0.75
+        assertEquals(
+            priceService.calculatePurchasePrice(
+                getUser(subscriptions = emptyList()),
+                List(10) { getBook() }
+            ),
+            getBook().basePrice * 10.0 * 0.8
+        )
+    }
+
+    @Test
+    fun `empty list means no price`() {
+        assertNull(
+            priceService.calculatePurchasePrice(
+                getUser(),
+                listOf()
             )
-        }
+        )
     }
 
     companion object {
