@@ -33,8 +33,7 @@ object PriceService {
         }
 
     @Suppress("UNCHECKED_CAST")
-    private inline fun <T> List<T?>.ifNullsReturn(ifInDo: () -> Nothing): List<T> {
-        if (null in this) ifInDo()
-        return this as List<T>
+    private inline fun <T> List<T?>.ifNullsReturn(ifInDo: () -> List<T>): List<T> {
+        return if (null in this) ifInDo() else this as List<T>
     }
 }
