@@ -16,9 +16,9 @@ object PriceService {
 //        if (user.subscriptions.contains(Subscription.YandexPlus)) {
 //            return (2099 / 2).fromCents()
 //        }
-        return user.subscriptions.map {
-            book.basePrice * it.discount
-        }.map { it.toCents() }.minOrNull()?.fromCents() ?: book.basePrice
+        return user.subscriptions
+            .map { book.basePrice * it.discount }
+            .minOrNull() ?: book.basePrice
     }
 
     fun calculatePurchasePrice(user: User, books: List<Book>): Price? =

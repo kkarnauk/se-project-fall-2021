@@ -16,7 +16,7 @@ import kotlin.random.Random
 internal class PriceServiceTest(@Autowired val priceService: PriceService) {
 
     @Test
-    fun simplePriceCheck() {
+    fun `simple price check`() {
         priceService.calculatePurchasePrice(
             getUser(),
             getBook()
@@ -24,7 +24,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     }
 
     @Test
-    fun subscribeDecreasesPrice() {
+    fun `subscribe decrease price`() {
         getBook().let {
             assertTrue(
                 priceService.calculatePurchasePrice(
@@ -38,11 +38,12 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     @Test
     fun `full price if no subscriptions`() {
         getBook().let {
-            assertTrue(
+            assertEquals(
                 priceService.calculatePurchasePrice(
                     getUser(subscriptions = emptyList()),
                     it
-                ) == it.basePrice
+                ),
+                it.basePrice
             )
         }
     }
@@ -78,7 +79,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     }
 
     @Test
-    fun yandexPlusStressTest() {
+    fun `yandex plus stress test`() {
         List(1000) {
             getUser(subscriptions = listOf(Subscription.YandexPlus)).let {
                 val book = getBook(price = Price(Random.nextInt(), Random.nextInt()))
