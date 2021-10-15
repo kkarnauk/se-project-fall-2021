@@ -142,11 +142,11 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
 
     @Test
     fun `included book costs nothing`() {
-        assertTrue(
+        assertNull(
             priceService.calculatePurchasePrice(
                 getUser(subscriptions = mutableSetOf(Subscription.Bookmark)),
                 getBook(id = 1u)
-            ) == Price(0, 0)
+            )
         )
     }
 

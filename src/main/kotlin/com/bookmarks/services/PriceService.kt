@@ -14,7 +14,7 @@ object PriceService {
             return null
         }
         return user.subscriptions
-            .onEach { if (it.bookIncluded(book)) return 0.fromCents()  }
+            .onEach { if (it.bookIncluded(book)) return null }
             .map { book.basePrice * it.discount }
             .minOrNull() ?: book.basePrice
     }
