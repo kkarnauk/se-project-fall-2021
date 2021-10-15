@@ -1,11 +1,8 @@
 package com.bookmarks.services
 
-import com.bookmarks.models.Book
-import com.bookmarks.models.Price
+import com.bookmarks.models.*
 import com.bookmarks.models.Price.Companion.fromCents
 import com.bookmarks.models.Price.Companion.toCents
-import com.bookmarks.models.Subscription
-import com.bookmarks.models.User
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,7 +25,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
         getBook().let {
             assertTrue(
                 priceService.calculatePurchasePrice(
-                    getUser(subscriptions = listOf(Subscription.Bookmark)),
+                    getUser(subscriptions = mutableSetOf(Subscription.Bookmark)),
                     it
                 )!! < it.basePrice
             )
@@ -40,7 +37,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
         getBook().let {
             assertEquals(
                 priceService.calculatePurchasePrice(
-                    getUser(subscriptions = emptyList()),
+                    getUser(subscriptions = mutableSetOf()),
                     it
                 ),
                 it.basePrice
@@ -50,7 +47,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
 
     @Test
     fun `bought book costs nothing`() {
-        assertNull(priceService.calculatePurchasePrice(getUser(bookIds = listOf(getBook().id)), getBook()))
+        assertNull(priceService.calculatePurchasePrice(getUser(bookIds = mutableSetOf(getBook().id)), getBook()))
     }
 
     @Test
@@ -58,7 +55,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
         getBook().let {
             assertTrue(
                 priceService.calculatePurchasePrice(
-                    getUser(subscriptions = emptyList(), bookIds = listOf(getBook().id + 123u)),
+                    getUser(subscriptions = mutableSetOf(), bookIds = mutableSetOf(getBook().id + 123u)),
                     it
                 ) == it.basePrice
             )
@@ -70,7 +67,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
         getBook().let {
             assertEquals(
                 priceService.calculatePurchasePrice(
-                    getUser(subscriptions = listOf(Subscription.YandexPlus)),
+                    getUser(subscriptions = mutableSetOf(Subscription.YandexPlus)),
                     it
                 ),
                 (it.basePrice.toCents() / 2).fromCents()
@@ -81,7 +78,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     @Test
     fun `yandex plus stress test`() {
         List(1000) {
-            getUser(subscriptions = listOf(Subscription.YandexPlus)).let {
+            getUser(subscriptions = mutableSetOf(Subscription.YandexPlus)).let {
                 val book = getBook(price = Price(Random.nextInt(), Random.nextInt()))
                 assertEquals(
                     priceService.calculatePurchasePrice(it, book)!!,
@@ -95,7 +92,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     fun `simple purchase book bundle`() {
         priceService.calculatePurchasePrice(
             getUser(),
-            listOf()
+            emptyList()
         )
     }
 
@@ -104,7 +101,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
         getBook().let {
             assertTrue(
                 priceService.calculatePurchasePrice(
-                    getUser(subscriptions = emptyList()),
+                    getUser(subscriptions = mutableSetOf()),
                     listOf(it)
                 ) == it.basePrice
             )
@@ -115,7 +112,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     fun `5 books gives 10 percent discount`() {
         assertEquals(
             priceService.calculatePurchasePrice(
-                getUser(subscriptions = emptyList()),
+                getUser(subscriptions = mutableSetOf()),
                 List(5) { getBook() }
             ),
             getBook().basePrice * 5.0 * 0.9
@@ -126,7 +123,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     fun `10 books gives 15 percent discount`() {
         assertEquals(
             priceService.calculatePurchasePrice(
-                getUser(subscriptions = emptyList()),
+                getUser(subscriptions = mutableSetOf()),
                 List(10) { getBook() }
             ),
             getBook().basePrice * 10.0 * 0.8
@@ -138,7 +135,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
         assertNull(
             priceService.calculatePurchasePrice(
                 getUser(),
-                listOf()
+                emptyList()
             )
         )
     }
@@ -147,17 +144,25 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     fun `included book costs nothing`() {
         assertTrue(
             priceService.calculatePurchasePrice(
-                getUser(subscriptions = listOf(Subscription.Bookmark)),
+                getUser(subscriptions = mutableSetOf(Subscription.Bookmark)),
                 getBook(id = 1u)
             ) == Price(0, 0)
         )
     }
 
     @Test
-    fun `user buys book and than he cannot buy it again`() {
+    fun `user can buy book only once`() {
         val user = getUser()
         val book = getBook()
-        user.buy(book)
+        user.purchase(book)
+        assertNull(priceService.calculatePurchasePrice(user, book))
+    }
+
+    @Test
+    fun `subscription for author`() {
+        val author = getAuthor()
+        val user = getUser(subscriptions = mutableSetOf(Subscription.ForAuthor(author)))
+        val book = getBook(authorId = author.id)
         assertNull(priceService.calculatePurchasePrice(user, book))
     }
 
@@ -167,15 +172,21 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
             name: String = "Petya",
             surname: String = "Surkov",
             nickname: String = "psurkov",
-            subscriptions: List<Subscription> = emptyList(),
-            bookIds: List<UInt> = emptyList()
+            subscriptions: MutableSet<Subscription> = mutableSetOf(),
+            bookIds: MutableSet<UInt> = mutableSetOf()
         ) = User(id, name, surname, nickname, subscriptions, bookIds)
 
         private fun getBook(
             id: UInt = 2020u,
             name: String = "Through Galaxy",
             price: Price = Price(20, 99),
-            author: String = "kek22"
-        ) = Book(id, name, price, author)
+            authorId: UInt = getAuthor().id
+        ) = Book(id, name, price, authorId)
+
+        private fun getAuthor(
+            id: UInt = 2u,
+            name: String = "Boris",
+            surname: String = "Novikov"
+        ) = Author(id, name, surname)
     }
 }

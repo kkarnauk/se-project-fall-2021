@@ -5,10 +5,10 @@ data class User(
     val name: String,
     val surname: String,
     val nickname: String,
-    val subscriptions: List<Subscription>,
-    val purchasedBookIds: List<UInt>,
+    val subscriptions: MutableSet<Subscription>,
+    val purchasedBookIds: MutableSet<UInt>,
 ) {
-    fun buy(book: Book) {
-        TODO("implement")
+    fun purchase(book: Book) {
+        purchasedBookIds += book.id
     }
 }
