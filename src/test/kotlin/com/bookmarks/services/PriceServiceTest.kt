@@ -3,11 +3,11 @@ package com.bookmarks.services
 import com.bookmarks.models.*
 import com.bookmarks.models.Price.Companion.fromCents
 import com.bookmarks.models.Price.Companion.toCents
+import kotlin.random.Random
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import kotlin.random.Random
 
 @SpringBootTest
 internal class PriceServiceTest(@Autowired val priceService: PriceService) {

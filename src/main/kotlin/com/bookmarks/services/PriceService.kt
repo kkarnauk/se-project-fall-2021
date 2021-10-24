@@ -25,10 +25,10 @@ object PriceService {
         .ifNullsIn { return null }
         .sumOf { it.toCents() }
         .fromCents() * when {
-            books.size >= 10 -> 0.8
-            books.size >= 5 -> 0.9
-            else -> 1.0
-        }
+        books.size >= 10 -> 0.8
+        books.size >= 5 -> 0.9
+        else -> 1.0
+    }
 
     @Suppress("UNCHECKED_CAST")
     private inline fun <T> List<T?>.ifNullsIn(ifInDo: () -> List<T>): List<T> {
