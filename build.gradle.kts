@@ -6,6 +6,7 @@ plugins {
     kotlin("jvm") version "1.5.31"
     kotlin("plugin.spring") version "1.5.31"
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0" apply true
+    id("jacoco")
 }
 
 group = "com.bookmarks"
@@ -21,6 +22,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    implementation("org.jacoco:org.jacoco.core:0.8.7")
     testImplementation("org.springframework.boot:spring-boot-starter-test:2.5.5")
 }
 
@@ -37,4 +39,10 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.withType<JacocoReport> {
+    reports {
+        csv.required.set(true)
+    }
 }
