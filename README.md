@@ -1,4 +1,6 @@
-# Yandex.Bookmarks (SE study project, Fall 2021) [![Build](https://github.com/kkarnauk/se-project-fall-2021/actions/workflows/build.yml/badge.svg)](https://github.com/kkarnauk/se-project-fall-2021/actions/workflows/build.yml)
+# Yandex.Bookmarks (SE study project, Fall 2021) 
+[![Build](https://github.com/kkarnauk/se-project-fall-2021/actions/workflows/build.yml/badge.svg)](https://github.com/kkarnauk/se-project-fall-2021/actions/workflows/build.yml)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
 Provides a service for buying books (single ones and subscriptions) to read them online inside Yandex.Go system.
 
@@ -33,4 +35,4 @@ Egor Lebedev (@LebedevEA)
 Kirill Karnaukhov (@kkarnauk)
 
 ## Licence
-(TODO)
+[GNU AGPLv3](https://choosealicense.com/licenses/agpl-3.0/)
