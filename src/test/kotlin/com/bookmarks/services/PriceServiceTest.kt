@@ -185,6 +185,43 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
         )
     }
 
+    @Test
+    fun `test week rent`() {
+        val book = getBook()
+        assertEquals(
+            book.basePrice * 0.5,
+            priceService.calculateWeekRentPrice(getUser(), book)
+        )
+    }
+
+    @Test
+    fun `test week rent with special offer`() {
+        val book = getBook()
+        assertEquals(
+            book.basePrice * 0.25,
+            priceService.calculateWeekRentPrice(getUser(), book, SpecialOffer(nextYear(), 0.5))
+        )
+    }
+
+    @Test
+    fun `test week rent bought book`() {
+        val book = getBook()
+        assertNull(priceService.calculateWeekRentPrice(getUser(bookIds = mutableSetOf(book.id)), book))
+    }
+
+    @Test
+    fun `test week rent with special offer with free week rent`() {
+        val book = getBook()
+        assertEquals(
+            Price(0, 0),
+            priceService.calculateWeekRentPrice(
+                getUser(),
+                book,
+                SpecialOffer(nextYear(), 0.5, listOf(book.id))
+            )
+        )
+    }
+
     companion object {
         private fun getUser(
             id: UInt = 228u,
@@ -199,8 +236,9 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
             id: UInt = 2020u,
             name: String = "Through Galaxy",
             price: Price = Price(20, 99),
-            authorId: UInt = getAuthor().id
-        ) = Book(id, name, price, authorId)
+            authorId: UInt = getAuthor().id,
+            readDays: Int = 7
+        ) = Book(id, name, price, authorId, readDays)
 
         private fun getAuthor(
             id: UInt = 2u,

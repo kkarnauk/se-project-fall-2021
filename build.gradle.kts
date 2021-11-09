@@ -18,12 +18,13 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter:2.5.5")
+    implementation("org.springframework.boot:spring-boot-starter:2.5.6")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.junit.jupiter:junit-jupiter:5.8.1")
     implementation("org.jacoco:org.jacoco.core:0.8.7")
-    testImplementation("org.springframework.boot:spring-boot-starter-test:2.5.5")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.5.6")
+    implementation("org.jetbrains.exposed:spring-transaction:0.36.2")
 }
 
 ktlint {

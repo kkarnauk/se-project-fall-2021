@@ -12,6 +12,14 @@ import org.springframework.stereotype.Component
 
 @Component
 object PriceService {
+//    Full rent price if half of purchase price, scales to week linearly
+    fun calculateWeekRentPrice(user: User, book: Book, specialOffer: SpecialOffer? = null): Price? =
+        if (specialOffer?.freeRentWeekBookIds?.contains(book.id) == true) {
+            0.fromCents()
+        } else calculatePurchasePriceBase(user, book)?.let {
+            (it.toCents() * 7.0 / book.readDays * 0.5).toInt().fromCents().applySpecialOffer(specialOffer)
+        }
+
     fun calculatePurchasePrice(user: User, book: Book, specialOffer: SpecialOffer? = null): Price? =
         calculatePurchasePriceBase(user, book)?.applySpecialOffer(specialOffer)
 
