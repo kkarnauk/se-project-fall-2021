@@ -3,6 +3,7 @@ package com.bookmarks.services
 import com.bookmarks.models.*
 import com.bookmarks.models.Price.Companion.fromCents
 import com.bookmarks.models.Price.Companion.toCents
+import java.util.*
 import kotlin.random.Random
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -166,6 +167,24 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
         assertNull(priceService.calculatePurchasePrice(user, book))
     }
 
+    @Test
+    fun `test special offer before deadline`() {
+        val book = getBook()
+        assertEquals(
+            book.basePrice * 0.5,
+            priceService.calculatePurchasePrice(getUser(), book, SpecialOffer(nextYear(), 0.5))
+        )
+    }
+
+    @Test
+    fun `test special offer after deadline`() {
+        val book = getBook()
+        assertEquals(
+            book.basePrice,
+            priceService.calculatePurchasePrice(getUser(), book, SpecialOffer(prevYear(), 0.5))
+        )
+    }
+
     companion object {
         private fun getUser(
             id: UInt = 228u,
@@ -188,5 +207,21 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
             name: String = "Boris",
             surname: String = "Novikov"
         ) = Author(id, name, surname)
+
+        private fun nextYear(): Date {
+            val now = Date()
+            val cal = Calendar.getInstance()
+            cal.time = now
+            cal.add(Calendar.YEAR, 1)
+            return cal.time
+        }
+
+        private fun prevYear(): Date {
+            val now = Date()
+            val cal = Calendar.getInstance()
+            cal.time = now
+            cal.add(Calendar.YEAR, -1)
+            return cal.time
+        }
     }
 }
