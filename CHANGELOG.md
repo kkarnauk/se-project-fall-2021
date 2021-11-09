@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2021-11-09
+### Added
+- Rent price caluclation
+- Free rent for week in special offers
+- Cart price calculation
+
 ## [0.2.0] - 2021-11-09
 ### Added
 - Special offers: additional discount with deadline
