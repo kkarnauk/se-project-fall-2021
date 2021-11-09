@@ -1,17 +1,33 @@
 package com.bookmarks.services
 
-import com.bookmarks.models.Book
-import com.bookmarks.models.Price
+import com.bookmarks.models.*
 import com.bookmarks.models.Price.Companion.fromCents
 import com.bookmarks.models.Price.Companion.toCents
-import com.bookmarks.models.SpecialOffer
-import com.bookmarks.models.User
 import com.bookmarks.services.PriceService.applySpecialOffer
 import java.util.*
 import org.springframework.stereotype.Component
 
 @Component
 object PriceService {
+    fun calculateCartPrice(user: User, cart: Cart, specialOffer: SpecialOffer? = null): Price? {
+        if (cart.bookList().groupBy { it }.filterValues { it.size > 1 }.isNotEmpty()) return null
+        if (cart.bookList().any { it.id in user.purchasedBookIds }) return null
+
+        val purchases = cart.elements.filterIsInstance<Purchase>().map { it.book }
+        val rents = cart.elements.filterIsInstance<Rent>()
+
+        val rentPrice = rents.fold(Price(0, 0)) { acc, rent ->
+            val rentWeekPrice = calculateWeekRentPrice(user, rent.book, specialOffer) ?: return null
+            acc + (rentWeekPrice.toCents() * rent.weeks).fromCents()
+        }
+
+        val purchasePrice =
+            if (purchases.isEmpty()) 0.fromCents()
+            else calculatePurchasePrice(user, purchases, specialOffer) ?: return null
+
+        return rentPrice + purchasePrice
+    }
+
 //    Full rent price if half of purchase price, scales to week linearly
     fun calculateWeekRentPrice(user: User, book: Book, specialOffer: SpecialOffer? = null): Price? =
         if (specialOffer?.freeRentWeekBookIds?.contains(book.id) == true) {
@@ -56,4 +72,6 @@ object PriceService {
         specialOffer?.let {
             if (it.deadline.after(Date())) this * it.discount else this
         } ?: this
+
+    private fun Cart.bookList(): List<Book> = this.elements.map { it.book }
 }

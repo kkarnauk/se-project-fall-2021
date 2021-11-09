@@ -222,6 +222,40 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
         )
     }
 
+    @Test
+    fun `test cart`() {
+        val cart = Cart(
+            listOf(
+                Rent(getBook(id = 0u, price = 100.fromCents()), 1),
+                Purchase(getBook(id = 1u, price = 200.fromCents()))
+            )
+        )
+        assertEquals(250.fromCents(), priceService.calculateCartPrice(getUser(), cart))
+    }
+
+    @Test
+    fun `test cart nulls if bought`() {
+        val cart = Cart(
+            listOf(
+                Rent(getBook(id = 0u, price = 100.fromCents()), 1),
+                Purchase(getBook(id = 1u, price = 200.fromCents()))
+            )
+        )
+        assertNull(priceService.calculateCartPrice(getUser(bookIds = mutableSetOf(0u)), cart))
+        assertNull(priceService.calculateCartPrice(getUser(bookIds = mutableSetOf(1u)), cart))
+    }
+
+    @Test
+    fun `test cart nulls if same`() {
+        val cart = Cart(
+            listOf(
+                Rent(getBook(id = 0u, price = 100.fromCents()), 1),
+                Purchase(getBook(id = 0u, price = 100.fromCents()))
+            )
+        )
+        assertNull(priceService.calculateCartPrice(getUser(), cart))
+    }
+
     companion object {
         private fun getUser(
             id: UInt = 228u,
