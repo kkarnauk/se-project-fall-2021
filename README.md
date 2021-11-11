@@ -27,6 +27,30 @@ You can run tests as well:
 ./gradlew test
 ```
 
+## Docker
+There are two Dockerfiles for running tests and creating minimal image to launch the application.
+
+Go to dockerfile folder
+```shell
+cd dockerfile
+```
+Run
+```shell
+docker build -t build-bookmarks -f build.Dockerfile .
+```
+to build application and run tests.
+
+Or run
+```shell
+docker build -t minimal-to-run-bookmarks -f minimalToRun.Dockerfile .
+```
+and then run the image `minimal-to-run-bookmarks`
+```shell
+docker run minimal-to-run-bookmarks
+```
+You will see Spring Boot console logo
+
+![minimalToRun](img/minimalToRun.png)
 ## Contributors
 Peter Surkov (@psurkov)
 
