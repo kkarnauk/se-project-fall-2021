@@ -1,14 +1,11 @@
 package com.bookmarks.services
 
 import com.bookmarks.models.*
-import com.bookmarks.models.Price.Companion.fromCents
-import com.bookmarks.models.Price.Companion.toCents
-import java.util.*
-import kotlin.random.Random
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import kotlin.random.Random
 
 @SpringBootTest
 internal class PriceServiceTest(@Autowired val priceService: PriceService) {
@@ -167,95 +164,6 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
         assertNull(priceService.calculatePurchasePrice(user, book))
     }
 
-    @Test
-    fun `test special offer before deadline`() {
-        val book = getBook()
-        assertEquals(
-            book.basePrice * 0.5,
-            priceService.calculatePurchasePrice(getUser(), book, SpecialOffer(nextYear(), 0.5))
-        )
-    }
-
-    @Test
-    fun `test special offer after deadline`() {
-        val book = getBook()
-        assertEquals(
-            book.basePrice,
-            priceService.calculatePurchasePrice(getUser(), book, SpecialOffer(prevYear(), 0.5))
-        )
-    }
-
-    @Test
-    fun `test week rent`() {
-        val book = getBook()
-        assertEquals(
-            book.basePrice * 0.5,
-            priceService.calculateWeekRentPrice(getUser(), book)
-        )
-    }
-
-    @Test
-    fun `test week rent with special offer`() {
-        val book = getBook()
-        assertEquals(
-            book.basePrice * 0.25,
-            priceService.calculateWeekRentPrice(getUser(), book, SpecialOffer(nextYear(), 0.5))
-        )
-    }
-
-    @Test
-    fun `test week rent bought book`() {
-        val book = getBook()
-        assertNull(priceService.calculateWeekRentPrice(getUser(bookIds = mutableSetOf(book.id)), book))
-    }
-
-    @Test
-    fun `test week rent with special offer with free week rent`() {
-        val book = getBook()
-        assertEquals(
-            Price(0, 0),
-            priceService.calculateWeekRentPrice(
-                getUser(),
-                book,
-                SpecialOffer(nextYear(), 0.5, listOf(book.id))
-            )
-        )
-    }
-
-    @Test
-    fun `test cart`() {
-        val cart = Cart(
-            listOf(
-                Rent(getBook(id = 0u, price = 100.fromCents()), 1),
-                Purchase(getBook(id = 1u, price = 200.fromCents()))
-            )
-        )
-        assertEquals(250.fromCents(), priceService.calculateCartPrice(getUser(), cart))
-    }
-
-    @Test
-    fun `test cart nulls if bought`() {
-        val cart = Cart(
-            listOf(
-                Rent(getBook(id = 0u, price = 100.fromCents()), 1),
-                Purchase(getBook(id = 1u, price = 200.fromCents()))
-            )
-        )
-        assertNull(priceService.calculateCartPrice(getUser(bookIds = mutableSetOf(0u)), cart))
-        assertNull(priceService.calculateCartPrice(getUser(bookIds = mutableSetOf(1u)), cart))
-    }
-
-    @Test
-    fun `test cart nulls if same`() {
-        val cart = Cart(
-            listOf(
-                Rent(getBook(id = 0u, price = 100.fromCents()), 1),
-                Purchase(getBook(id = 0u, price = 100.fromCents()))
-            )
-        )
-        assertNull(priceService.calculateCartPrice(getUser(), cart))
-    }
-
     companion object {
         private fun getUser(
             id: UInt = 228u,
@@ -270,30 +178,13 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
             id: UInt = 2020u,
             name: String = "Through Galaxy",
             price: Price = Price(20, 99),
-            authorId: UInt = getAuthor().id,
-            readDays: Int = 7
-        ) = Book(id, name, price, authorId, readDays)
+            authorId: UInt = getAuthor().id
+        ) = Book(id, name, price, authorId)
 
         private fun getAuthor(
             id: UInt = 2u,
             name: String = "Boris",
             surname: String = "Novikov"
         ) = Author(id, name, surname)
-
-        private fun nextYear(): Date {
-            val now = Date()
-            val cal = Calendar.getInstance()
-            cal.time = now
-            cal.add(Calendar.YEAR, 1)
-            return cal.time
-        }
-
-        private fun prevYear(): Date {
-            val now = Date()
-            val cal = Calendar.getInstance()
-            cal.time = now
-            cal.add(Calendar.YEAR, -1)
-            return cal.time
-        }
     }
 }
