@@ -16,18 +16,20 @@ class PriceService {
     }
 
     fun calculatePurchasePrice(user: User, books: List<Book>): Price? = books
-        .ifEmpty { return null }
-        .map { calculatePurchasePrice(user, it) }
-        .ifNullsIn { return null }
-        .sumOf { it.toCents() }
-        .fromCents() * when {
-        books.size >= 10 -> 0.8
-        books.size >= 5 -> 0.9
-        else -> 1.0
-    }
+        .takeIf { it.isNotEmpty() }
+        ?.map { calculatePurchasePrice(user, it) }
+        ?.takeIfNoNulls()
+        ?.sumOf { it.toCents() }
+        ?.fromCents()?.let {
+            it * when {
+                books.size >= 10 -> 0.8
+                books.size >= 5 -> 0.9
+                else -> 1.0
+            }
+        }
 
     @Suppress("UNCHECKED_CAST")
-    private inline fun <T> List<T?>.ifNullsIn(ifInDo: () -> List<T>): List<T> {
-        return if (null in this) ifInDo() else this as List<T>
+    private fun <T> List<T?>.takeIfNoNulls(): List<T>? {
+        return if (null in this) null else this as List<T>
     }
 }
