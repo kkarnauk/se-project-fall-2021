@@ -4,7 +4,7 @@ import com.bookmarks.models.*
 import org.springframework.stereotype.Component
 
 @Component
-object PriceService {
+class PriceService {
     fun calculatePurchasePrice(user: User, book: Book): Price? {
         if (book.id in user.purchasedBookIds) {
             return null
