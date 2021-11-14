@@ -2,7 +2,7 @@ package com.bookmarks.models
 
 data class User(
     val id: UInt,
-    val name: String,
+    val firstname: String,
     val surname: String,
     val nickname: String,
     val subscriptions: MutableSet<Subscription>,
