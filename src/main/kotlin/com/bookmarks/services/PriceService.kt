@@ -1,10 +1,6 @@
 package com.bookmarks.services
 
-import com.bookmarks.models.Book
-import com.bookmarks.models.Price
-import com.bookmarks.models.Price.Companion.fromCents
-import com.bookmarks.models.Price.Companion.toCents
-import com.bookmarks.models.User
+import com.bookmarks.models.*
 import org.springframework.stereotype.Component
 
 @Component
