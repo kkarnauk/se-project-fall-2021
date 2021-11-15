@@ -23,7 +23,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
         getBook().let {
             assertTrue(
                 priceService.calculatePurchasePrice(
-                    getUser(subscriptions = mutableSetOf(Subscription.Bookmark)),
+                    getUser(subscriptions = setOf(Subscription.Bookmark)),
                     it
                 )!! < it.basePrice
             )
@@ -35,7 +35,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
         getBook().let {
             assertEquals(
                 priceService.calculatePurchasePrice(
-                    getUser(subscriptions = mutableSetOf()),
+                    getUser(subscriptions = emptySet()),
                     it
                 ),
                 it.basePrice
@@ -45,7 +45,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
 
     @Test
     fun `bought book costs nothing`() {
-        assertNull(priceService.calculatePurchasePrice(getUser(bookIds = mutableSetOf(getBook().id)), getBook()))
+        assertNull(priceService.calculatePurchasePrice(getUser(bookIds = setOf(getBook().id)), getBook()))
     }
 
     @Test
@@ -53,7 +53,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
         getBook().let {
             assertTrue(
                 priceService.calculatePurchasePrice(
-                    getUser(subscriptions = mutableSetOf(), bookIds = mutableSetOf(getBook().id + 123u)),
+                    getUser(subscriptions = emptySet(), bookIds = setOf(getBook().id + 123u)),
                     it
                 ) == it.basePrice
             )
@@ -65,7 +65,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
         getBook().let {
             assertEquals(
                 priceService.calculatePurchasePrice(
-                    getUser(subscriptions = mutableSetOf(Subscription.YandexPlus)),
+                    getUser(subscriptions = setOf(Subscription.YandexPlus)),
                     it
                 ),
                 (it.basePrice.toCents() / 2).fromCents()
@@ -76,7 +76,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     @Test
     fun `yandex plus stress test`() {
         List(1000) {
-            getUser(subscriptions = mutableSetOf(Subscription.YandexPlus)).let {
+            getUser(subscriptions = setOf(Subscription.YandexPlus)).let {
                 val book = getBook(price = Price(Random.nextInt(), Random.nextInt()))
                 assertEquals(
                     priceService.calculatePurchasePrice(it, book)!!,
@@ -99,7 +99,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
         getBook().let {
             assertTrue(
                 priceService.calculatePurchasePrice(
-                    getUser(subscriptions = mutableSetOf()),
+                    getUser(subscriptions = emptySet()),
                     listOf(it)
                 ) == it.basePrice
             )
@@ -110,7 +110,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     fun `5 books gives 10 percent discount`() {
         assertEquals(
             priceService.calculatePurchasePrice(
-                getUser(subscriptions = mutableSetOf()),
+                getUser(subscriptions = emptySet()),
                 List(5) { getBook() }
             ),
             getBook().basePrice * 5.0 * 0.9
@@ -121,7 +121,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     fun `10 books gives 15 percent discount`() {
         assertEquals(
             priceService.calculatePurchasePrice(
-                getUser(subscriptions = mutableSetOf()),
+                getUser(subscriptions = emptySet()),
                 List(10) { getBook() }
             ),
             getBook().basePrice * 10.0 * 0.8
@@ -142,7 +142,7 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     fun `included book costs nothing`() {
         assertNull(
             priceService.calculatePurchasePrice(
-                getUser(subscriptions = mutableSetOf(Subscription.Bookmark)),
+                getUser(subscriptions = setOf(Subscription.Bookmark)),
                 getBook(id = 1u)
             )
         )
@@ -152,14 +152,14 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     fun `user can buy book only once`() {
         val user = getUser()
         val book = getBook()
-        user.purchase(book)
+        user.purchase(book.id)
         assertNull(priceService.calculatePurchasePrice(user, book))
     }
 
     @Test
     fun `subscription for author`() {
         val author = getAuthor()
-        val user = getUser(subscriptions = mutableSetOf(Subscription.ForAuthor(author)))
+        val user = getUser(subscriptions = setOf(Subscription.ForAuthor(author)))
         val book = getBook(authorId = author.id)
         assertNull(priceService.calculatePurchasePrice(user, book))
     }
@@ -170,9 +170,12 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
             firstname: String = "Petya",
             surname: String = "Surkov",
             nickname: String = "psurkov",
-            subscriptions: MutableSet<Subscription> = mutableSetOf(),
-            bookIds: MutableSet<UInt> = mutableSetOf()
-        ) = User(id, firstname, surname, nickname, subscriptions, bookIds)
+            subscriptions: Set<Subscription> = emptySet(),
+            bookIds: Set<UInt> = emptySet()
+        ) = User(id, firstname, surname, nickname).apply {
+            subscriptions.forEach { subscribe(it) }
+            bookIds.forEach { purchase(it) }
+        }
 
         private fun getBook(
             id: UInt = 2020u,
