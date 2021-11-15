@@ -167,19 +167,19 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     companion object {
         private fun getUser(
             id: UInt = 228u,
-            name: String = "Petya",
+            firstname: String = "Petya",
             surname: String = "Surkov",
             nickname: String = "psurkov",
             subscriptions: MutableSet<Subscription> = mutableSetOf(),
             bookIds: MutableSet<UInt> = mutableSetOf()
-        ) = User(id, name, surname, nickname, subscriptions, bookIds)
+        ) = User(id, firstname, surname, nickname, subscriptions, bookIds)
 
         private fun getBook(
             id: UInt = 2020u,
-            name: String = "Through Galaxy",
+            firstname: String = "Through Galaxy",
             price: Price = Price(20, 99),
             authorId: UInt = getAuthor().id
-        ) = Book(id, name, price, authorId)
+        ) = Book(id, firstname, price, authorId)
 
         private fun getAuthor(
             id: UInt = 2u,
