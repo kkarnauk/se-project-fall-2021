@@ -1,14 +1,14 @@
-## Классы пользователей
-#### Незарегистрированный пользователь
-Пользователь, возможно, впервые зашедший на сайт или просто не залогиненный в систему. Может просматривать каталог книг, но покупать ничего не может.
-#### Зарегистрированный пользователь
-Залогиненный пользователь, может смотреть каталог, покупать книги, оставлять отзывы.
-#### Модератор
-Может модерировать комментарии к книгам.
-#### Правообладатель
-Один или несколько человек с которым идёт обсуждение прав на ту или иную книгу.
-#### Администратор
-Имеет доступ к контактам правообладателей для обсуждения условий добавления новых книжек.
+## Roles
+#### Unauthorized user
+Unathorized users can view books and comments to them, but cannot purchase books or subscriptions. Also they can sign in.
+#### Authorized user
+Authorized users can view books, purchase books and subscriptions, view and leave comments. Also they can sign out.
+#### Moderator
+Moderators can view, edit, leave and remove comments to books.
+#### Copyright holder
+Copyright holders can agree with a service manager to add or remove a book to/from the service.
+#### Service manager
+Service managers have contacts of copyright holders and can agree with them to add/remove books.
 
 ## Use case
 ![use cases](https://github.com/kkarnauk/se-project-fall-2021/blob/task_6/img/useCase.jpg)
