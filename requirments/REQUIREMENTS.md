@@ -11,7 +11,7 @@
 Имеет доступ к контактам правообладателей для обсуждения условий добавления новых книжек.
 
 ## Use case
-![use cases](https://raw.githubusercontent.com/kkarnauk/se-project-fall-2021/task_6/img/useCase.jpg)
+![use cases](https://github.com/kkarnauk/se-project-fall-2021/blob/task_6/img/useCase.jpg)
 ## User story
 Пример (todo удалить):
 Как официант, я хочу видеть клиентов меня вызывающих, чтобы иметь возможность их обслужить
