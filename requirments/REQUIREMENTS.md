@@ -26,13 +26,10 @@ As service manager, I want to sign agreement with copyright holders, so I can ad
 ## Job stories
 
 #### Job story №1
-When user buys a subscription I want to let him read books for free, so I can add books into subscription plan
+When user buys a subscription I want to let them read books for free, so I can add books into subscription plan
 
 #### Job story №2
-When user buys a subscription/a book I want to save his purchases, so I can allow him to sign up & sign in
+When user buys a subscription/a book I want to save their purchases, so I can allow them signing up & signing in
 
 #### Job story №3
-When user read a book I want to him to share his opinion on this book, so I can let him leave a review
-
-## Что ещё надо сделать и удалить этот раздел
-Обновить roadmap посмотрев на прошлые разделы ну и кажется всё :)
+When user read a book I want them to share their opinion on this book, so I can let them leave a review
