@@ -12,55 +12,27 @@ Service managers have contacts of copyright holders and can agree with them to a
 
 ## Use case
 ![use cases](https://github.com/kkarnauk/se-project-fall-2021/blob/task_6/img/useCase.jpg)
-## User story
-Пример (todo удалить):
-Как официант, я хочу видеть клиентов меня вызывающих, чтобы иметь возможность их обслужить
+## User stories
+
 #### User story №1
-As __________________________________
-<роль или тип пользователя>		
-I want to _____________________________
-<сделать/иметь возможность>
-so __________________________________
-<результат>
+As user, I want to add books to cart, so I can buy them
 
 #### User story №2
-As __________________________________
-<роль или тип пользователя>		
-I want to _____________________________
-<сделать/иметь возможность>
-so __________________________________
-<результат>
+As moderator, I want to delete book reviews in order to remove offencive texts from service
+
 #### User story №3
-As __________________________________
-<роль или тип пользователя>		
-I want to _____________________________
-<сделать/иметь возможность>
-so __________________________________
-<результат>
-## Job story
-Пример (todo удалить):
-Когда много гостей, я хочу видеть тех кто меня вызывает, чтобы успевать обслуживать всех и не создавать лишнего ожидания
+As service manager, I want to sign agreement with copyright holders, so I can add their books to service
+
+## Job stories
+
 #### Job story №1
-When __________________________________
-<ситуация/контекст>		
-I want to ________________________________
-<мотивация>
-so I can ________________________________
-<результат>
+When user buys a subscription I want to let him read books for free, so I can add books into subscription plan
+
 #### Job story №2
-When __________________________________
-<ситуация/контекст>		
-I want to ________________________________
-<мотивация>
-so I can ________________________________
-<результат>
+When user buys a subscription/a book I want to save his purchases, so I can allow him to sign up & sign in
+
 #### Job story №3
-When __________________________________
-<ситуация/контекст>		
-I want to ________________________________
-<мотивация>
-so I can ________________________________
-<результат>
+When user read a book I want to him to share his opinion on this book, so I can let him leave a review
 
 ## Что ещё надо сделать и удалить этот раздел
 Обновить roadmap посмотрев на прошлые разделы ну и кажется всё :)
