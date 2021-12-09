@@ -1,9 +1,8 @@
 package com.bookmarks.models
 
-// TODO issue with not copying subscriptions and books while [copy].
 data class User(
     val id: UInt,
-    val firstname: String,
+    val name: String,
     val surname: String,
     val nickname: String,
 ) {
