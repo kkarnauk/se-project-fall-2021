@@ -6,9 +6,8 @@ data class Price(val dollars: Int, val cents: Int) : Comparable<Price> {
 
     operator fun times(discount: Double): Price = ((toCents() * discount).toInt().fromCents())
     operator fun plus(other: Price): Price = (this.toCents() + other.toCents()).fromCents()
-
-    companion object {
-        fun Price.toCents(): Int = dollars * 100 + cents
-        fun Int.fromCents(): Price = Price(this / 100, this % 100)
-    }
 }
+
+fun Price.toCents(): Int = dollars * 100 + cents
+
+fun Int.fromCents(): Price = Price(this / 100, this % 100)
