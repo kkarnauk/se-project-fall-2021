@@ -30,19 +30,15 @@ You can run tests as well:
 ## Docker
 There are two Dockerfiles for running tests and creating minimal image to launch the application.
 
-Go to dockerfile folder
-```shell
-cd dockerfile
-```
 Run
 ```shell
-docker build -t build-bookmarks -f build.Dockerfile .
+docker build -t build-bookmarks -f dockerfile/build.Dockerfile .
 ```
 to build application and run tests.
 
 Or run
 ```shell
-docker build -t minimal-to-run-bookmarks -f minimalToRun.Dockerfile .
+docker build -t minimal-to-run-bookmarks -f dockerfile/minimalToRun.Dockerfile .
 ```
 and then run the image `minimal-to-run-bookmarks`
 ```shell

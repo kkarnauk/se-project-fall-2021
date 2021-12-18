@@ -1,9 +1,8 @@
-FROM gradle:7.2-jdk11-alpine AS build
-WORKDIR /home/gradle/src
-RUN git clone -b task_4 https://github.com/kkarnauk/se-project-fall-2021.git .
-RUN gradle build --no-daemon
+FROM openjdk:11-jre-slim AS build
+WORKDIR /bookmarks
+COPY . .
+RUN ./gradlew bootJar --no-daemon
 
-RUN rm build/libs/*-plain.jar
 FROM openjdk:11-jre-slim
-COPY --from=build /home/gradle/src/build/libs/*.jar application/app.jar
-ENTRYPOINT ["java", "-jar", "application/app.jar"]
+COPY --from=build /bookmarks/build/libs/*.jar bookmarks/app.jar
+ENTRYPOINT ["java", "-jar", "bookmarks/app.jar"]
