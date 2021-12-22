@@ -15,4 +15,8 @@ sealed class Subscription(val discount: Double) {
     class ForAuthor(private val author: Author) : Subscription(1.0) {
         override fun bookIncluded(book: Book): Boolean = author.id == book.authorId
     }
+
+    object ForChildren : Subscription(0.9) {
+        override fun bookIncluded(book: Book): Boolean = false
+    }
 }
