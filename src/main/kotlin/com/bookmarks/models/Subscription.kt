@@ -16,7 +16,7 @@ sealed class Subscription(val discount: Double) {
         override fun bookIncluded(book: Book): Boolean = author.id == book.authorId
     }
 
-    object ForChildren : Subscription(1.9) {
+    object ForChildren : Subscription(0.9) {
         override fun bookIncluded(book: Book): Boolean = false
     }
 }

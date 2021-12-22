@@ -77,12 +77,11 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     @Test
     fun `discount for children`() {
         getBook().let {
-            assertNotEquals(
-                it.basePrice,
-                priceService.calculatePurchasePrice(
+            assertTrue(
+                it.basePrice > priceService.calculatePurchasePrice(
                     getUser(subscriptions = setOf(Subscription.ForChildren)),
                     it
-                )
+                )!!
             )
         }
     }
