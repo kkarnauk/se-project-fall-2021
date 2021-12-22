@@ -75,6 +75,19 @@ internal class PriceServiceTest(@Autowired val priceService: PriceService) {
     }
 
     @Test
+    fun `discount for children`() {
+        getBook().let {
+            assertNotEquals(
+                it.basePrice,
+                priceService.calculatePurchasePrice(
+                    getUser(subscriptions = setOf(Subscription.ForChildren)),
+                    it
+                )
+            )
+        }
+    }
+
+    @Test
     fun `yandex plus stress test`() {
         List(1000) {
             getUser(subscriptions = setOf(Subscription.YandexPlus)).let {
