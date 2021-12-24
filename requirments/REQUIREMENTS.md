@@ -15,10 +15,10 @@ Service managers have contacts of copyright holders and can agree with them to a
 ## User stories
 
 #### User story №1
-As user, I want to add books to cart, so I can buy them
+As user, I want to save the books i want to buy, so I can buy them later
 
 #### User story №2
-As moderator, I want to delete book reviews in order to remove offencive texts from service
+As moderator, I want to delete book reviews in order to remove offensive texts from service
 
 #### User story №3
 As service manager, I want to sign agreement with copyright holders, so I can add their books to service
@@ -26,10 +26,10 @@ As service manager, I want to sign agreement with copyright holders, so I can ad
 ## Job stories
 
 #### Job story №1
-When user buys a subscription I want to let them read books for free, so I can add books into subscription plan
+When new book is released I want to add to service so I can sell it to customers
 
 #### Job story №2
-When user buys a subscription/a book I want to save their purchases, so I can allow them signing up & signing in
+When there is new book edition I want to update book in service so I can satisfy customer
 
 #### Job story №3
-When user read a book I want them to share their opinion on this book, so I can let them leave a review
+When there is some holiday I want to add new subscription so I can attract new customers
