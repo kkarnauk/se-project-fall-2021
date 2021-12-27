@@ -5,6 +5,7 @@ data class Price(val dollars: Int, val cents: Int) : Comparable<Price> {
         toCents().compareTo(other.toCents())
 
     operator fun times(discount: Double): Price = ((toCents() * discount).toInt().fromCents())
+    operator fun plus(other: Price): Price = (this.toCents() + other.toCents()).fromCents()
 }
 
 fun Price.toCents(): Int = dollars * 100 + cents
