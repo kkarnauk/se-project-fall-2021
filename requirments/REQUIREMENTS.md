@@ -11,7 +11,7 @@ Copyright holders can agree with a service manager to add or remove a book to/fr
 Service managers have contacts of copyright holders and can agree with them to add/remove books.
 
 ## Use case
-![use cases](https://github.com/kkarnauk/se-project-fall-2021/blob/task_6/img/useCase.jpg)
+![use cases](https://github.com/kkarnauk/se-project-fall-2021/blob/task_6/img/useCase2.jpg)
 ## User stories
 
 #### User story №1
